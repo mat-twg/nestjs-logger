@@ -32,6 +32,11 @@ export class Logger extends ConsoleLogger {
     );
   }
 
+  setContext(context: string): Logger {
+    super.setContext(context);
+    return this;
+  }
+
   setOptions(options: ConsoleLoggerOptions): Logger {
     this.options = options;
     return this;
@@ -64,10 +69,6 @@ export class Logger extends ConsoleLogger {
     return diff;
   }
 
-  private mapParams(params: any[]): string {
-    return this.ctxWithParams(params);
-  }
-
   private warpParams(params: any[]): string {
     if (this.options?.timestamp) {
       params.push(`+${this.getTimestampDiff()}ms`);
@@ -83,7 +84,7 @@ export class Logger extends ConsoleLogger {
     if (typeof message === 'string') {
       const colorMessage = color ? color(`${message}`) : `${message}`;
       return [
-        this.mapParams(params),
+        this.ctxWithParams(params),
         this.options?.timestamp
           ? colorMessage + clc.yellow(` +${this.getTimestampDiff()}ms`)
           : colorMessage,
